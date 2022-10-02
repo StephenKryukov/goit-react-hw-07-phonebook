@@ -1,10 +1,10 @@
 import s from './Filter.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { filterContact } from 'redux/contactSlice';
+import { filterContact } from 'redux/filterSlice';
 
-export default function Filter() {
+const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(state => state.contacts.filter);
+  const filter = useSelector(state => state.filter.value);
 
   const filterChange = e => {
     dispatch(filterContact(e.currentTarget.value));
@@ -22,4 +22,6 @@ export default function Filter() {
       </label>
     </div>
   );
-}
+};
+
+export default Filter;

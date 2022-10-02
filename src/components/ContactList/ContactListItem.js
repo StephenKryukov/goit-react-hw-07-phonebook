@@ -1,21 +1,24 @@
 import React from 'react';
 import s from './ContactList.module.css';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/contactSlice';
+import { useDeleteContactMutation } from 'redux/contactsApi';
 
-export const ContactListItem = ({ id, name, number }) => {
-  const dispatch = useDispatch();
-  const contactsDelete = id => dispatch(deleteContact(id));
+const ContactListItem = ({ id, name, phone }) => {
+  const [deleteContact] = useDeleteContactMutation();
+
+  const handleDeleteContact = async id => {
+    await deleteContact(id).unwrap();
+  };
+
   return (
-    <li className={s.item} key={id}>
+    <li className={s.item} id={id}>
       <p className={s.contact}>
-        {name}: {number}
+        {name}: {phone}
       </p>
       <button
         className={s.button}
         type="submit"
-        onClick={() => contactsDelete(id)}
+        onClick={() => handleDeleteContact(id)}
       >
         Delete
       </button>
@@ -26,5 +29,7 @@ export const ContactListItem = ({ id, name, number }) => {
 ContactListItem.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired,
 };
+
+export default ContactListItem;

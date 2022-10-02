@@ -1,5 +1,5 @@
 import ContactForm from './ContactForm/ContactForm';
-import { ContactList } from './ContactList/ContactList';
+import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 
 export default function App() {
@@ -16,7 +16,7 @@ export default function App() {
         // color: '#010101',
       }}
     >
-      <h1>Phonebook 07</h1>
+      <h1>Phonebook</h1>
       <ContactForm />
       <Filter />
       <h2 style={{ marginBottom: '0' }}>Contacts</h2>
