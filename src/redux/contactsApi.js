@@ -1,42 +1,36 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const contactsApi = createApi({
-  reducerPath: 'contactsApi',
-  tagTypes: ['Contacts'],
+  reducerPath: 'contacts',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://63394faf383946bc7ff13a77.mockapi.io/contacts/',
+    baseUrl: 'https://6339d709d6ef071af817233d.mockapi.io',
   }),
-  endpoints: builder => ({
-    getContactsApi: builder.query({
-      query: () => `contacts`,
-      providesTags: result =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Contacts', id })),
-              { type: 'Contacts', id: 'LIST' },
-            ]
-          : [{ type: 'Contacts', id: 'LIST' }],
+  tagTypes: ['Contact'],
+  endpoints: buider => ({
+    getContacts: buider.query({
+      query: () => '/contacts',
+      providesTags: ['Contact'],
     }),
-    addContact: builder.mutation({
-      query: body => ({
-        url: `contacts`,
+    addContact: buider.mutation({
+      query: data => ({
+        url: '/contacts',
         method: 'POST',
-        body,
+        body: data,
       }),
-      invalidatesTags: [{ type: 'Contacts', id: 'LIST' }],
+      invalidatesTags: ['Contact'],
     }),
-    deleteContact: builder.mutation({
-      query: contactId => ({
-        url: `contacts/${contactId}`,
+    deleteContact: buider.mutation({
+      query: id => ({
+        url: `/contacts/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [{ type: 'Contacts', id: 'LIST' }],
+      invalidatesTags: ['Contact'],
     }),
   }),
 });
 
 export const {
-  useGetContactsApiQuery,
+  useGetContactsQuery,
   useDeleteContactMutation,
   useAddContactMutation,
 } = contactsApi;

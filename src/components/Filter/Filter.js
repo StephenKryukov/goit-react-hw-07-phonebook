@@ -1,14 +1,16 @@
 import s from './Filter.module.css';
 import { useSelector, useDispatch } from 'react-redux';
+import { selectFilter } from 'redux/selectors';
 import { filterContact } from 'redux/filterSlice';
 
-const Filter = () => {
+export default function Filter() {
+  const filter = useSelector(selectFilter);
   const dispatch = useDispatch();
-  const filter = useSelector(state => state.filter.value);
 
-  const filterChange = e => {
+  const eventFilter = e => {
     dispatch(filterContact(e.currentTarget.value));
   };
+
   return (
     <div className={s.box}>
       <label className={s.label}>
@@ -16,12 +18,10 @@ const Filter = () => {
         <input
           className={s.input}
           value={filter}
-          type="name"
-          onChange={filterChange}
+          type="text"
+          onChange={eventFilter}
         />
       </label>
     </div>
   );
-};
-
-export default Filter;
+}

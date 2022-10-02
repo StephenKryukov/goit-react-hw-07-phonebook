@@ -1,46 +1,24 @@
 import ContactListItem from './ContactListItem';
 import s from './ContactList.module.css';
 import { useSelector } from 'react-redux';
-import { useGetContactsApiQuery } from '../../redux/contactsApi';
+import { selectContacts, selectFilter } from 'redux/selectors';
 
-const ContactList = () => {
-  const { data, isLoading } = useGetContactsApiQuery();
-  const filter = useSelector(state => state.filter.value);
+export default function ContactList() {
+  const contacts = useSelector(selectContacts);
 
-  const filteredContacts = () => {
-    const normalizeFilter = filter.toLowerCase();
-    return (
-      data &&
-      data.filter(contact =>
-        contact.name.toLowerCase().includes(normalizeFilter)
-      )
-    );
-  };
-
-  const filterEl = filteredContacts();
+  const filter = useSelector(selectFilter);
 
   return (
-    <>
-      {isLoading && <p>Loading...</p>}
-      {
-        <ul className={s.list}>
-          {!isLoading && data && filterEl.length > 0 ? (
-            filterEl.map(({ id, name, phone }) => (
-              <ContactListItem
-                key={id}
-                name={name}
-                number={phone}
-                id={id}
-                data={filterEl}
-              />
-            ))
-          ) : (
-            <p className={s.text}>The list is empty</p>
-          )}
-        </ul>
-      }
-    </>
+    <ul className={s.list}>
+      {contacts
+        .filter(contact => {
+          return filter
+            ? contact.name.toLowerCase().includes(filter.toLowerCase())
+            : true;
+        })
+        .map(({ id, name, phone }) => {
+          return <ContactListItem key={id} name={name} phone={phone} id={id} />;
+        })}
+    </ul>
   );
-};
-
-export default ContactList;
+}

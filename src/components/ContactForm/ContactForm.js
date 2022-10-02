@@ -1,48 +1,53 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { nanoid } from '@reduxjs/toolkit';
+import { addContact } from 'redux/operations';
 import s from './ContactForm.module.css';
-import {
-  useAddContactMutation,
-  useGetContactsApiQuery,
-} from '../../redux/contactsApi.js';
+import { useSelector } from 'react-redux';
+import { selectContacts } from 'redux/selectors';
 
 export default function ContactForm() {
+  const contacts = useSelector(selectContacts);
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [addContact] = useAddContactMutation();
-  const { data } = useGetContactsApiQuery();
 
   const handleChange = e => {
-    const prop = e.currentTarget.name;
-    switch (prop) {
+    const { name, value } = e.currentTarget;
+    switch (name) {
       case 'name':
-        setName(e.currentTarget.value);
+        setName(value);
         break;
       case 'phone':
-        setPhone(e.currentTarget.value);
+        setPhone(value);
         break;
       default:
-        throw new Error('Error');
+        return;
     }
   };
+  const reset = () => {
+    setName('');
+    setPhone('');
+  };
 
-  const handleAddContact = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (
-      data.find(contact => contact.name.toLowerCase() === name.toLowerCase())
+      contacts?.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      )
     ) {
-      setName('');
-      setPhone('');
-      return alert(`Number: ${name} is already in phonebook`);
+      // const queryContacts = contacts.
+      return alert(`${name} is already in contacts.`);
     }
-    if (name && phone) {
-      await addContact({ name: name, phone: phone }).unwrap();
-      setName('');
-      setPhone('');
-    }
+
+    const newContact = { id: nanoid(), name, phone };
+    dispatch(addContact(newContact));
+    reset();
   };
 
   return (
-    <form className={s.form} onSubmit={handleAddContact}>
+    <form className={s.form} onSubmit={handleSubmit}>
       <label className={s.label}>
         Name
         <input
