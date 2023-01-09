@@ -29,7 +29,7 @@ export default function App() {
         // color: '#010101',
       }}
     >
-      <h1>Phonebook</h1>
+      <h1>Phonebook 07</h1>
       <ContactForm />
       <Filter />
       <h2 style={{ marginBottom: '0' }}>Contacts</h2>
